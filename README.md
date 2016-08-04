@@ -19,3 +19,20 @@ For OS X:
 http://deeplearning.net/software/theano/install.html#gpu-macos
 
 TODO Check if pip version is compatible with our examples.
+
+## Running the handwritten digit recognition code
+
+```python mnist_mlp.py```
+
+The results are written to standard output, and a confusion matrix
+visualization is written to ```vis.png```.
+
+## Running the deep dream code
+
+You need the pre-trained VGG16 model weights file called ```vgg16_weights.h5```, from
+https://drive.google.com/file/d/0Bz7KyqmuGsilT0J5dmRCM0ROVHc/view
+You have to open the link in a browser, wget is circumvented.
+
+```python vgg16_deep_dream.py input_image.png output_file_prefix```
+
+The final output is in ```output_file_prefix_at_iteration_9.png```.
