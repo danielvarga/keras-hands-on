@@ -70,6 +70,7 @@ settings = saved_settings['daniel']
 def preprocess_image(image_path):
     img = imresize(imread(image_path), (img_width, img_height))
     img = img.transpose((2, 0, 1)).astype('float64')
+    img = img[:3, :, :] # getting rid of alpha.
     img = np.expand_dims(img, axis=0)
     return img
 

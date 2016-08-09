@@ -5,10 +5,9 @@ Gets to 98.40% test accuracy after 20 epochs
 2 seconds per epoch on a K520 GPU.
 '''
 
-from __future__ import print_function
 import numpy as np
 from collections import defaultdict
-import PIL.Image as Image
+import scipy.misc
 
 np.random.seed(1337)  # for reproducibility
 
@@ -68,8 +67,8 @@ history = model.fit(X_train, Y_train,
                     verbose=1, validation_data=(X_test, Y_test))
 
 score = model.evaluate(X_test, Y_test, verbose=0)
-print('Test score:', score[0])
-print('Test accuracy:', score[1])
+print 'Test score:', score[0]
+print 'Test accuracy:', score[1]
 
 Y_pred = model.predict(X_test, batch_size=batch_size)
 y_pred = np.argmax(Y_pred, axis=1)
@@ -96,5 +95,4 @@ for (predicted_tag, actual_tag, image) in zip(y_pred, y_test, X_test):
 
 vis_image[::image_size * bucket_size, :] = 0
 vis_image[:, ::image_size * bucket_size] = 0
-vis_img = Image.fromarray(vis_image)
-vis_img.save("vis.png")
+scipy.misc.imsave("vis.png", vis_image)
