@@ -39,7 +39,7 @@ We train and evaluate our own handwritten digit recognition network.
 The evaluation results are written to standard output, and a confusion matrix
 visualization is written to ```vis.png```. The confusion matrix looks like this:
 
-![MNIST confusion matrix](http://people.mokk.bme.hu/~daniel/keras-hands-on-mnist-confusion.png "MNIST confusion matrix"  =140x)
+![MNIST confusion matrix](http://people.mokk.bme.hu/~daniel/keras-hands-on-mnist-confusion.png =1400x)
 
 
 ## Running the VGG-16 image classification code
