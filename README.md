@@ -14,6 +14,7 @@ With [Theano](http://deeplearning.net/software/theano/)
 With [TensorFlow](https://www.tensorflow.org/)
 ```
 ./setup.sh --tensorflow
+```
 
 If you have an Nvidia video card, you are advised to install CUDA and CuDNN.
 The first steps of the Theano installation instructions explain how:
