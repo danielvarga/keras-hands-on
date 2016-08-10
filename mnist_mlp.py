@@ -42,14 +42,14 @@ Y_test = np_utils.to_categorical(y_test, nb_classes)
 
 # We build the neural network:
 
-layer_size = 100
+layer_size = 512
 dropout_rate = 0.2
-nonlinearity = 'tanh'
+nonlinearity = 'relu'
 inputs = Input(shape=(nb_features,))
 net = Dense(layer_size, activation=nonlinearity)(inputs)
-# net = Dropout(dropout_rate)(net)
-# net = Dense(layer_size, activation=nonlinearity)(net)
-# net = Dropout(dropout_rate)(net)
+net = Dropout(dropout_rate)(net)
+net = Dense(layer_size, activation=nonlinearity)(net)
+net = Dropout(dropout_rate)(net)
 predictions = Dense(nb_classes, activation='softmax')(net)
 
 model = Model(input=inputs, output=predictions)

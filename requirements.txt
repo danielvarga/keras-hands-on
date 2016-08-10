@@ -1,0 +1,8 @@
+Keras==1.0.7
+numpy==1.11.1
+PyYAML==3.11
+scipy==0.18.0
+six==1.10.0
+Theano==0.8.2
+pillow==3.3.0
+h5py==2.6.0

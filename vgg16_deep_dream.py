@@ -64,7 +64,7 @@ saved_settings = {
                'neuron_id': 21} # 21 textile, 26 eyes
 }
 # the settings we will use in this experiment
-settings = saved_settings['daniel']
+settings = saved_settings['bad_trip']
 
 # util function to open, resize and format pictures into appropriate tensors
 def preprocess_image(image_path):
