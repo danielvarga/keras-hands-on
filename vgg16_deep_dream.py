@@ -60,7 +60,7 @@ saved_settings = {
     'daniel': {'features': {'conv5_1': 0.05},
                'continuity': 0.1,
                'dream_l2': 1.0,
-               'jitter': 0,
+               'jitter': 1,
                'neuron_id': 21} # 21 textile, 26 eyes
 }
 # the settings we will use in this experiment
@@ -158,7 +158,7 @@ for layer_name in settings['features']:
     shape = layer_dict[layer_name].output_shape
     print("shape", shape)
     # we avoid border artifacts by only involving non-border pixels in the loss
-    loss -= coeff * shape[1] * K.sum(K.square(x[:, settings['neuron_id'], 2: shape[2]-2, 2: shape[3]-2])) / np.prod(shape[1:])
+    loss -= coeff * shape[1] * K.sum(K.square(x[:, :, 2: shape[2]-2, 2: shape[3]-2])) / np.prod(shape[1:])
 
 # add continuity loss (gives image local coherence, can result in an artful blur)
 loss += settings['continuity'] * continuity_loss(dream) / (3 * img_width * img_height)
