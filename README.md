@@ -30,6 +30,13 @@ On a Linux machine, it's also worth looking into the linear algebra libraries in
 see the above Ubuntu link for more information (Chapter: Troubleshooting: Make sure you have a BLAS library).
 
 
+## Introduction to tensor computation
+
+The ```theano``` subdirectory contains code snippets illustrating some tensor library concepts.
+For (much) more information, you can check out http://deeplearning.net/software/theano/tutorial/
+or https://github.com/nlintz/TensorFlow-Tutorials .
+
+
 ## Running the handwritten digit recognition code
 
 We train and evaluate our own handwritten digit recognition network.
