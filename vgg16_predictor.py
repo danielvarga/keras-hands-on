@@ -57,8 +57,9 @@ def VGG_16(weights_path=None):
     return model
 
 if __name__ == "__main__":
-    # Test pretrained model
+    print "constructing network..."
     model = VGG_16('vgg16_weights.h5')
+    print "done"
     sgd = SGD(lr=0.1, decay=1e-6, momentum=0.9, nesterov=True)
     model.compile(optimizer=sgd, loss='categorical_crossentropy')
 
