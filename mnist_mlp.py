@@ -27,12 +27,16 @@ nb_epoch = 20
 # The data, shuffled and split between train and test sets
 (X_train, y_train), (X_test, y_test) = mnist.load_data()
 
+# flatten the 28x28 images to arrays of length 28*28:
 X_train = X_train.reshape(60000, nb_features)
 X_test = X_test.reshape(10000, nb_features)
+
+# convert brightness values from bytes to floats between 0 and 1:
 X_train = X_train.astype('float32')
 X_test = X_test.astype('float32')
 X_train /= 255
 X_test /= 255
+
 print(X_train.shape[0], 'train samples')
 print(X_test.shape[0], 'test samples')
 
@@ -42,11 +46,14 @@ Y_test = np_utils.to_categorical(y_test, nb_classes)
 
 # We build the neural network:
 
+layer_size = 100
+dropout_rate = 0.2
+nonlinearity = 'tanh'
 inputs = Input(shape=(nb_features,))
-net = Dense(512, activation='relu')(inputs)
-net = Dropout(0.2)(net)
-net = Dense(512, activation='relu')(net)
-net = Dropout(0.2)(net)
+net = Dense(layer_size, activation=nonlinearity)(inputs)
+# net = Dropout(dropout_rate)(net)
+# net = Dense(layer_size, activation=nonlinearity)(net)
+# net = Dropout(dropout_rate)(net)
 predictions = Dense(nb_classes, activation='softmax')(net)
 
 model = Model(input=inputs, output=predictions)

@@ -2,6 +2,9 @@
 
 ## Installing Keras
 
+**UPDATE:** Check out the cool install script by Akos Hochrein:
+https://github.com/akoskaaa/hands-on-deep-learning
+
 Installing Theano and its dependencies is the hard part:
 http://deeplearning.net/software/theano/install.html#install
 
@@ -18,7 +21,12 @@ http://deeplearning.net/software/theano/install_ubuntu.html#install-ubuntu
 For OS X:
 http://deeplearning.net/software/theano/install.html#gpu-macos
 
+The examples are 5-15 times faster when running on GPU.
+
+
 TODO Check if pip version is compatible with our examples.
+
+TODO Set up ```.theanorc```.
 
 ## Running the handwritten digit recognition code
 
