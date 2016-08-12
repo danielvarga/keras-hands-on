@@ -80,3 +80,6 @@ This code also requires the pre-trained VGG16 model weights, see above.
 ```python vgg16_deep_dream.py input_image.png output_file_prefix```
 
 The final output is in ```output_file_prefix_at_iteration_9.png```.
+
+I have implemented a more advanced version of ```vgg16_deep_dream.py```, that can work
+with any pre-trained Keras neural network. It's at https://github.com/danielvarga/keras-deep-dream .
