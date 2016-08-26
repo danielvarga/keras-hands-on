@@ -13,6 +13,7 @@ from keras.layers import Input, Dense, Dropout, Activation
 from keras.optimizers import SGD, Adam, RMSprop
 from keras.utils import np_utils
 from keras.layers.advanced_activations import PReLU
+from keras.callbacks import Callback
 import keras.backend as K
 
 batch_size = 128
@@ -51,7 +52,7 @@ initial_alpha = 1.0 / 3
 
 def const_initializer(shape, name=None):
     # return K.ones(shape, name=name) * initial_alpha
-    return K.variable(initial_alpha * np.ones(shape), dtype=K.floatx(), name=name)
+    return K.variable(initial_alpha * np.ones(shape), name=name)
 
 net = Dense(layer_size)(inputs)
 net = PReLU(init=const_initializer)(net)
@@ -68,6 +69,21 @@ model.summary()
 # That was it, neural network is created now.
 # We compile it with the given loss and optimizer:
 
+
+def pretty_histogram(w):
+    c, s = np.histogram(w)
+    print
+    print "\t".join(map(lambda num: "%.3f" % num, s))
+    print "\t".join(map(str, c))
+
+class WeightDump(Callback):
+    def on_epoch_end(self, epoch, logs={}):
+        ls = self.model.layers
+        ls = [l for l in ls if l.name.startswith('prelu')]
+        for l in ls:
+            w = l.get_weights()
+            pretty_histogram(w)
+
 model.compile(loss='categorical_crossentropy',
               optimizer=RMSprop(),
               metrics=['accuracy'])
@@ -76,7 +92,8 @@ model.compile(loss='categorical_crossentropy',
 
 history = model.fit(X_train, Y_train,
                     batch_size=batch_size, nb_epoch=nb_epoch,
-                    verbose=1, validation_data=(X_test, Y_test))
+                    verbose=1, validation_data=(X_test, Y_test),
+                    callbacks=[WeightDump()])
 
 score = model.evaluate(X_test, Y_test, verbose=0)
 print 'Test score:', score[0]
