@@ -22,6 +22,9 @@ image_size = 28
 nb_features = image_size * image_size
 nb_epoch = 20
 
+# Is set in add_prelu_relaxation_loss()
+prelu_target_alpha = None
+
 # The data, shuffled and split between train and test sets
 (X_train, y_train), (X_test, y_test) = mnist.load_data()
 
@@ -64,6 +67,11 @@ predictions = Dense(nb_classes, activation='softmax')(net)
 
 model = Model(input=inputs, output=predictions)
 
+def prelu_layers(model):
+    ls = model.layers
+    ls = [l for l in ls if l.name.startswith('prelu')]
+    return ls
+
 model.summary()
 
 # That was it, neural network is created now.
@@ -78,8 +86,7 @@ def pretty_histogram(w):
 
 class WeightDump(Callback):
     def on_epoch_end(self, epoch, logs={}):
-        ls = self.model.layers
-        ls = [l for l in ls if l.name.startswith('prelu')]
+        ls = prelu_layers(self.model)
         for l in ls:
             w = l.get_weights()
             pretty_histogram(w)
@@ -88,12 +95,33 @@ model.compile(loss='categorical_crossentropy',
               optimizer=RMSprop(),
               metrics=['accuracy'])
 
+
+prelu_relaxation_weight = 1.0
+
+def add_prelu_relaxation_loss(model):
+    global prelu_target_alpha
+    prelu_target_alpha = K.variable(1.0/3)
+    for layer in prelu_layers(model):
+        layer_loss = K.mean((layer.alphas - prelu_target_alpha) ** 2)
+        model.total_loss += layer_loss * prelu_relaxation_weight
+
+add_prelu_relaxation_loss(model)
+
+class PReLUAlphaDecay(Callback):
+    def __init__(self, start, end):
+        self.decrement = (start-end) / nb_epoch
+        K.set_value(prelu_target_alpha, start)
+    def on_epoch_end(self, epoch, logs={}):
+        new_prelu_target_alpha = K.get_value(prelu_target_alpha) - self.decrement
+        K.set_value(prelu_target_alpha, new_prelu_target_alpha)
+        print "prelu_target_alpha", new_prelu_target_alpha
+
 # Let's train it!
 
 history = model.fit(X_train, Y_train,
                     batch_size=batch_size, nb_epoch=nb_epoch,
                     verbose=1, validation_data=(X_test, Y_test),
-                    callbacks=[WeightDump()])
+                    callbacks=[WeightDump(), PReLUAlphaDecay(1.0, 0.0)])
 
 score = model.evaluate(X_test, Y_test, verbose=0)
 print 'Test score:', score[0]
