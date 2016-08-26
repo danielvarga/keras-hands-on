@@ -9,10 +9,11 @@ np.random.seed(1337)  # for reproducibility
 
 from keras.datasets import mnist
 from keras.models import Model
-from keras.layers import Input, Dense, Dropout
+from keras.layers import Input, Dense, Dropout, Activation
 from keras.optimizers import SGD, Adam, RMSprop
 from keras.utils import np_utils
-
+from keras.layers.advanced_activations import PReLU
+import keras.backend as K
 
 batch_size = 128
 nb_classes = 10
@@ -44,11 +45,19 @@ Y_test = np_utils.to_categorical(y_test, nb_classes)
 
 layer_size = 512
 dropout_rate = 0.2
-nonlinearity = 'relu'
 inputs = Input(shape=(nb_features,))
-net = Dense(layer_size, activation=nonlinearity)(inputs)
+
+initial_alpha = 1.0 / 3
+
+def const_initializer(shape, name=None):
+    # return K.ones(shape, name=name) * initial_alpha
+    return K.variable(initial_alpha * np.ones(shape), dtype=K.floatx(), name=name)
+
+net = Dense(layer_size)(inputs)
+net = PReLU(init=const_initializer)(net)
 net = Dropout(dropout_rate)(net)
-net = Dense(layer_size, activation=nonlinearity)(net)
+net = Dense(layer_size)(net)
+net = PReLU(init=const_initializer)(net)
 net = Dropout(dropout_rate)(net)
 predictions = Dense(nb_classes, activation='softmax')(net)
 
